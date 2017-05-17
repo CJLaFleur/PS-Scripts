@@ -5,6 +5,7 @@ It is mandatory that a computer name be specified.
 The domain is hard-coded and will be set automatically.
 #>
 
+
 function Set-Domain{
   Add-Computer -DomainName main.city.northampton.ma.us
 }
@@ -12,14 +13,26 @@ function Set-Domain{
 function Set-CName{
   [CmdletBinding()]
   param(
+    [Parameter(Mandatory=$True,
+      ValueFromPipeline=$True,
+      ValueFromPipelineByPropertyName=$True,
+      HelpMessage= "Enter the target computer name.")]
+      [Alias('Hostname','CN', 'ComputerName')]
+    $CName,
     [Parameter(Mandatory = $True,
-      HelpMessage = "Enter the computer name.")]
-      $CName
+      ValueFromPipeline=$True,
+      ValueFromPipelineByPropertyName=$True,
+      HelpMessage = "Enter the new computer name.")]
+      [Alias('NewName')]
+      $NewCName,
+    [Parameter(Mandatory = $True,
+      HelpMessage = "Enter your username.")]
+      $Credentials
   )
-  Rename-Computer $CName
+  Rename-Computer -ComputerName $CName -NewName $NewCName -DomainCredential $Username
 }
 
-Set-Domain()
-Set-CName()
+Set-Domain
+Set-CName
 
 Restart-Computer -Force
