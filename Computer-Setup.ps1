@@ -27,7 +27,7 @@ function Set-CName{
       $NewCName,
     [Parameter(Mandatory = $True,
       HelpMessage = "Enter your username.")]
-      $Credentials
+      $Username
   )
   Rename-Computer -ComputerName $CName -NewName $NewCName -DomainCredential $Username
 }

@@ -1,4 +1,3 @@
-
 $LogFile = "C:\Users\set-cname-errors.txt"
 
 function Set-CName{

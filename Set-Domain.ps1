@@ -1,3 +1,4 @@
+
 $LogFile = "C:\Users\set-domain-errors.txt"
 
 function Set-Domain{
@@ -29,7 +30,7 @@ function Set-Domain{
           $ErrorsHappened = $True
         }
       }
-      
+
   END {
     if ($ErrorsHappened) {
       Write-Warning "Errors logged to $ErrorLogFilePath."
