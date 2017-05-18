@@ -1,4 +1,4 @@
-$LogPath = "c:\errors.txt"
+$LogFile = "C:\Users\errors.txt"
 
 function Get-Uptime {
     [CmdletBinding()]
