@@ -10,6 +10,11 @@ function Set-Domain{
       [Alias('Hostname','CN', 'ComputerName')]
     [String[]]$CName,
 
+    [Parameter(Mandatory=$True,
+    HelpMessage= "Enter the target computer name.")]
+    [Alias('Auth')]
+
+
     [Parameter()]
     [string]$ErrorLogFilePath = $LogPath
     )
@@ -21,16 +26,20 @@ function Set-Domain{
 
   PROCESS{
     foreach ($Computer in $CName){
-        try{
-      Add-Computer -ComputerName $Computer -DomainName main.city.northampton.ma.us
+
+          Foreach ($Cred in $Credentials){
+          try{
+          Add-Computer -ComputerName $Computer -DomainName main.city.northampton.ma.us -Credential $Creds
+          }
         }
+      }
         catch{
           Write-Verbose "Couldn't connect to $Computer"
           $Computer | Out-File $ErrorLogFilePath -Append
           $ErrorsHappened = $True
         }
       }
-      
+
   END {
     if ($ErrorsHappened) {
       Write-Warning "Errors logged to $ErrorLogFilePath."
@@ -38,3 +47,43 @@ function Set-Domain{
     }
    }
 }
+
+<#$creds = Get-Credential
+For Each ($i in $collection)
+{
+   My-Cmdlet -Credential $creds
+}
+#>
+
+function Get-ComputerNameByIP {
+  param(
+    $IPAddress = $null
+)
+  BEGIN {
+  }
+  PROCESS {
+    if ($IPAddress -and $_) {
+      throw ‘Please use either pipeline or input parameter’
+      break
+    }
+  elseif ($IPAddress) {
+    ([System.Net.Dns]::GetHostbyAddress($IPAddress))
+  }
+  elseif ($_) {
+    trap [Exception] {
+      Write-Warning $_.Exception.Message
+      continue;
+    }
+    [System.Net.Dns]::GetHostbyAddress($_)
+  }
+  else {
+    $IPAddress = Read-Host “Please supply the IP Address”
+    [System.Net.Dns]::GetHostbyAddress($IPAddress)
+  }
+}
+  END {
+  }
+}
+
+#Use any range you want here
+1..255 | ForEach-Object {”10.20.100.$_”} | Get-ComputerNameByIP
