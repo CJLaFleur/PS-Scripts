@@ -63,7 +63,7 @@ function Get-ComputerNameByIP {
   }
   PROCESS {
     if ($IPAddress -and $_) {
-      throw ‘Please use either pipeline or input parameter’
+      throw "Please use either pipeline or input parameter"
       break
     }
   elseif ($IPAddress) {
@@ -77,7 +77,7 @@ function Get-ComputerNameByIP {
     [System.Net.Dns]::GetHostbyAddress($_)
   }
   else {
-    $IPAddress = Read-Host “Please supply the IP Address”
+    $IPAddress = Read-Host "Please supply the IP Address"
     [System.Net.Dns]::GetHostbyAddress($IPAddress)
   }
 }
@@ -86,4 +86,4 @@ function Get-ComputerNameByIP {
 }
 
 #Use any range you want here
-1..255 | ForEach-Object {”10.20.100.$_”} | Get-ComputerNameByIP
+1..255 | ForEach-Object {10.20.100.$_} | Get-ComputerNameByIP

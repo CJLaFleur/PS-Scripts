@@ -22,6 +22,7 @@ function Set-Domain{
   PROCESS{
     foreach ($Computer in $CName){
         try{
+          
       Add-Computer -ComputerName $Computer -DomainName main.city.northampton.ma.us
         }
         catch{
