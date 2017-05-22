@@ -85,7 +85,7 @@ function Global:Ping-IPRange {
     Get-Event -SourceIdentifier "ID-Ping*" | Remove-Event
     Get-EventSubscriber -SourceIdentifier "ID-Ping*" | Unregister-Event
 
-    $IPrange | foreach{
+    $IPrange | ForEach-Object{
 
         [string]$VarName = "Ping_" + $_.Address
 
@@ -101,7 +101,8 @@ function Global:Ping-IPRange {
 
             $pending = (Get-Event -SourceIdentifier "ID-Ping*").Count
 
-        }catch [System.InvalidOperationException]{}
+        }
+        catch [System.InvalidOperationException]{}
 
         $index = [array]::indexof($IPrange,$_)
 
@@ -135,15 +136,17 @@ function Global:Ping-IPRange {
             Remove-Event $_.SourceIdentifier
         }
 
-    }else{
+    }
+    else{
 
-        $Reply = Get-Event -SourceIdentifier "ID-Ping*" | ForEach {
+        $Reply = Get-Event -SourceIdentifier "ID-Ping*" | ForEach-Object {
             If($_.SourceEventArgs.Reply.Status -eq "Success"){
-                $_.SourceEventArgs.Reply | select @{
+                $_.SourceEventArgs.Reply | Select-Object @{
                       Name="IPAddress"   ; Expression={$_.Address}},
                     @{Name="Bytes"       ; Expression={$_.Buffer.Length}},
                     @{Name="Ttl"         ; Expression={$_.Options.Ttl}},
                     @{Name="ResponseTime"; Expression={$_.RoundtripTime}}
+                Write-Host $Reply
             }
             Unregister-Event $_.SourceIdentifier
             Remove-Event $_.SourceIdentifier
