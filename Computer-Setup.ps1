@@ -13,12 +13,6 @@ function Set-Domain{
 function Set-CName{
   [CmdletBinding()]
   param(
-    [Parameter(Mandatory=$True,
-      ValueFromPipeline=$True,
-      ValueFromPipelineByPropertyName=$True,
-      HelpMessage= "Enter the target computer name.")]
-      [Alias('Hostname','CN', 'ComputerName')]
-    $CName,
     [Parameter(Mandatory = $True,
       ValueFromPipeline=$True,
       ValueFromPipelineByPropertyName=$True,
@@ -29,7 +23,7 @@ function Set-CName{
       HelpMessage = "Enter your username.")]
       $Username
   )
-  Rename-Computer -ComputerName $CName -NewName $NewCName -DomainCredential $Username
+  Rename-Computer -ComputerName $env:USERDOMAIN -NewName $NewCName -DomainCredential $Username
 }
 
 Set-Domain
